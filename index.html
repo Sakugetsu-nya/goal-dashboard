@@ -220,6 +220,7 @@ svg{display:block}
 .home-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--grad-soft);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:18px}
 .home-greet{font-size:23px;font-weight:800;color:var(--ink);letter-spacing:.3px}
 .home-date{font-size:13px;color:var(--ink-3);font-weight:600;margin-top:4px}
+.home-tips{font-size:12.5px;color:#ff8fab;margin-top:6px;min-height:20px;transition:opacity .4s ease}
 .home-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:18px}
 .home-stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .home-stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--primary))}
@@ -769,6 +770,7 @@ svg{display:block}
           <div>
             <div class="home-greet" id="homeGreet">你好</div>
             <div class="home-date" id="homeDate"></div>
+            <div class="home-tips" id="homeTips"></div>
           </div>
           <button class="btn btn-primary" onclick="switchTab('timer')"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 9v4l2.5 2.5M9 2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>开始专注</button>
         </div>
@@ -828,7 +830,7 @@ svg{display:block}
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导出备份</h3><p>导出全部数据为 JSON 文件，含目标、习惯、分类与 checklist 记录，可跨设备迁移。</p><button class="btn btn-primary" onclick="exportJSON()">导出 JSON</button><div class="data-stats" id="dataStats"></div></div>
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9m0 0L8 13m4-4l4 4M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导入恢复</h3><p>选择 JSON 文件导入，会<b>覆盖</b>当前所有数据，请先导出备份。</p><input type="file" id="importFile" accept=".json" style="display:none"><button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">选择 JSON 文件</button><div class="file-note" id="importNote"></div></div>
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#ff8fab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>添加到手机主屏幕</h3><ol class="pwa-steps"><li><b>用手机浏览器打开</b>本页面链接（部署后获得）</li><li>点击浏览器底部或右上角的<b>分享按钮</b></li><li>选择「<b>添加到主屏幕</b>」或「添加到桌面」，即可像 APP 一样打开</li></ol></div>
-          <div class="me-card danger-zone"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>数据管理</h3><p>清空示例数据（保留自建目标与习惯），或彻底清空全部数据（需输入"清空"确认）。</p><button class="btn btn-ghost" onclick="clearSamples()">清空示例数据</button><button class="btn btn-danger" onclick="askClearAll()">清空全部数据</button></div>
+          <div class="me-card danger-zone"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>数据管理</h3><p>清空示例数据（保留自建目标与习惯），或彻底清空全部数据。</p><button class="btn btn-ghost" onclick="clearSamples()">清空示例数据</button><button class="btn btn-danger" onclick="askClearAll()">清空全部数据</button></div>
         </div>
       </section>
     </div>
@@ -1243,6 +1245,18 @@ function renderHome(){
   const name=state.userName||'';
   document.getElementById('homeGreet').textContent=greet+(name?'，'+name:'')+'，欢迎回到目标管理台';
   document.getElementById('homeDate').textContent=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${WEEKDAY_NAMES[now.getDay()]}`;
+  // 轮换小提示
+  if(!window._tipsTimer)clearInterval(window._tipsTimer);
+  const TIPS=[
+    '首次访问会出现示例数据，可在【我的】界面清空',
+    '数据存于本地浏览器，建议定期导出备份',
+    '今天也要加油~！'
+  ];
+  let tipIdx=0;
+  const tipEl=document.getElementById('homeTips');
+  const showTip=()=>{tipEl.style.opacity='0';setTimeout(()=>{tipEl.textContent=TIPS[tipIdx];tipEl.style.opacity='1';tipIdx=(tipIdx+1)%TIPS.length;},350)};
+  showTip();
+  window._tipsTimer=setInterval(showTip,6000);
   // 统计卡片
   let overdueN=0,todayN=0,undoneN=0;
   state.goals.forEach(g=>remainingItems(g).forEach(it=>{undoneN++;if(!it.dueDate)return;if(it.dueDate<t)overdueN++;else if(it.dueDate===t)todayN++}));
@@ -2763,7 +2777,7 @@ function renderAll(){
 }
 
 (function init(){
-  if(!load()||state.goals.length===0&&state.habits.length===0){seedSamples()}
+  if(!load()){seedSamples()}
   state.settings.lastVisit=todayStr();save();
   setupTagDrag('todoCatFilter');setupTagDrag('ideaFilter');
   updateNavBadge();updateHabitBadge();renderMe();switchTab(currentTab);
