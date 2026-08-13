@@ -2284,6 +2284,14 @@ function commitFocusSession(type, secs){
   state.focusLog.push({date:todayStr(),ts:Date.now(),type:type,secs:secs});
   save();
 }
+// 番茄钟专注阶段中途离开（跳过/重置）时，把已过的专注时长计入专注统计，但不算作完整番茄
+function pomoCommitPartial(){
+  if(pomo.phase!=='focus')return 0;
+  const focusMins=parseInt(dgid('pomoFocus').value,10)||25;
+  const elapsed=focusMins*60 - pomo.remaining;
+  if(elapsed>=60){commitFocusSession('pomopartial',elapsed);return Math.round(elapsed/60)}
+  return 0;
+}
 function focusStats(records){
   let pomo=0,up=0,down=0,total=0;
   (records||[]).forEach(r=>{const s=r.secs||0;total+=s;if(r.type==='pomodoro')pomo++;else if(r.type==='countup')up+=s;else if(r.type==='countdown')down+=s});
@@ -2317,6 +2325,10 @@ function updatePomoSkipVisibility(){
   if(b)b.style.display=pomo.started?'':'none';
 }
 function pomoReset(){
+  if(pomo.started&&pomo.phase==='focus'){
+    const mins=pomoCommitPartial();
+    if(mins)toast(`已记录 ${mins} 分钟专注时长`,'info');
+  }
   const focusMins=parseInt(dgid('pomoFocus').value,10)||25;
   pomo.running=false;pomo.started=false;pomo.phase='focus';pomo.remaining=focusMins*60;pomo.roundInSet=1;
   dgid('pomoStartBtn').textContent=pomo.running?'暂停':(pomo.started?'继续':'开始');
@@ -2331,11 +2343,12 @@ function pomoSkip(){
   const longBreakMins=parseInt(dgid('pomoLongBreak').value,10)||15;
   const totalRounds=parseInt(dgid('pomoRounds').value,10)||4;
   if(pomo.phase==='focus'){
+    const mins=pomoCommitPartial();
     const lastRound=pomo.roundInSet>=totalRounds;
     pomo.roundInSet++;
     if(lastRound){pomo.phase='longBreak';pomo.remaining=longBreakMins*60;}
     else{pomo.phase='break';pomo.remaining=breakMins*60;}
-    toast('已跳过专注，进入休息','info');
+    toast(mins?`已跳过专注，已记录 ${mins} 分钟专注时长`:'已跳过专注，进入休息','info');
   }else if(pomo.phase==='longBreak'){
     /* 跳过长休息 = 结束本轮番茄钟，不进入下一组 */
     pomoReset();
