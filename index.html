@@ -186,7 +186,7 @@ svg{display:block}
 .cat-pick:hover .cat-del{transform:scale(1.14);box-shadow:0 2px 6px rgba(0,0,0,.22)}
 .cat-pick .cat-del:hover{transform:scale(1.15)}
 .cat-add{display:flex;gap:8px;margin-top:10px}
-.cat-add input{flex:1}
+.cat-add input{width:auto;max-width:140px}
 
 /* Board */
 .board-overview{background:var(--surface);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:20px}
@@ -360,10 +360,12 @@ svg{display:block}
 .idea-ic-btn{width:38px;height:38px;padding:0;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
 .idea-ic-btn svg{width:19px;height:19px}
 .idea-ic-btn:hover{color:var(--primary);background:var(--primary-soft)}
-.idea-img-preview{position:relative;display:inline-block;margin-top:10px}
+.idea-img-preview{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:flex-start}
 .edit-tag-area{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .edit-tag-area .cat-new-input{width:100px}
 .idea-img-preview img{max-width:170px;max-height:130px;border-radius:11px;display:block;border:1px solid var(--line);box-shadow:var(--shadow)}
+.idea-img-thumb{position:relative;flex:0 0 auto}
+.idea-img-thumb img{max-width:120px;max-height:100px;border-radius:11px;display:block;border:1px solid var(--line);box-shadow:var(--shadow)}
 .idea-img-del{position:absolute;right:-9px;top:-9px;width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;font-size:14px;line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--surface);box-shadow:0 2px 6px rgba(0,0,0,.18);transition:transform .12s}
 .idea-img-del:hover{transform:scale(1.12)}
 .idea-img-edit-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -371,7 +373,11 @@ svg{display:block}
 .doodle-tools{display:flex;gap:16px;align-items:center;margin-top:14px;flex-wrap:wrap}
 .doodle-tool{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)}
 .doodle-tool input[type=color]{width:34px;height:30px;border:none;border-radius:8px;background:none;cursor:pointer;padding:0}
-.doodle-tool input[type=range]{width:120px;accent-color:var(--primary)}
+.doodle-tool input[type=range]{width:100%;max-width:200px;flex:1 1 160px;min-width:120px;accent-color:var(--primary);cursor:pointer;padding:0}
+.doodle-color-swatch{width:30px;height:30px;border-radius:8px;border:2px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12);flex-shrink:0}
+.doodle-size-tool{flex:1 1 160px;min-width:150px}
+.doodle-size-val{font-size:12px;color:var(--ink-3);min-width:20px;text-align:right;font-variant-numeric:tabular-nums}
+.doodle-eraser-btn.active{background:rgba(0,0,0,.06);border-color:var(--ink-3)}
 .modal-editor{width:100%;min-height:120px;max-height:300px;overflow:auto;font-family:inherit;font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;line-height:1.6;outline:none;transition:border-color .15s,background .15s}
 .modal-editor:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
 .modal-editor:empty:before{content:attr(data-placeholder);color:var(--ink-3);pointer-events:none}
@@ -380,7 +386,7 @@ svg{display:block}
 .lightbox-inner{position:relative;max-width:92vw;max-height:88vh;display:flex;align-items:center;justify-content:center}
 .lightbox-inner img{max-width:92vw;max-height:88vh;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .lightbox-inner::after{content:'✕';position:absolute;right:-14px;top:-14px;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25)}
-.idea-card .idea-img{margin-top:10px}
+.idea-card .idea-img{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
 .idea-card .idea-img img{max-width:100%;border-radius:11px;cursor:zoom-in;display:block;border:1px solid var(--line)}
 .idea-empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
 .idea-filter{display:flex;gap:8px;flex-wrap:wrap;padding:2px 0 6px;margin-bottom:14px}
@@ -711,7 +717,7 @@ svg{display:block}
           </div>
           <div class="idea-input-bar idea-tag-bar">
             <div class="idea-tag-picker" id="ideaTagPicker"></div>
-            <span class="idea-new-tag-wrap if-chip-wrap"><input type="text" id="ideaTag" class="cat-new-input" placeholder="或输入新标签…"></span>
+            <span class="idea-new-tag-wrap if-chip-wrap"><input type="text" id="ideaTag" class="cat-new-input" placeholder="输入新标签…"></span>
             <button class="btn btn-primary btn-sm idea-add-btn" onclick="addIdea()">记录灵感</button>
           </div>
           <div class="idea-img-preview" id="ideaImgPreview" style="display:none"></div>
@@ -828,7 +834,7 @@ svg{display:block}
         <div class="me-grid">
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>我的称呼</h3><p>设置你的昵称，首页问候时会用这个名字称呼你。</p><input type="text" id="userNameInput" placeholder="输入你的昵称" maxlength="20" value=""><button class="btn btn-primary btn-sm" onclick="saveUserName()" style="margin-top:8px">保存称呼</button></div>
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导出备份</h3><p>导出全部数据为 JSON 文件，含目标、习惯、分类与 checklist 记录，可跨设备迁移。</p><button class="btn btn-primary" onclick="exportJSON()">导出 JSON</button><div class="data-stats" id="dataStats"></div></div>
-          <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9m0 0L8 13m4-4l4 4M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导入恢复</h3><p>选择 JSON 文件导入，会<b>覆盖</b>当前所有数据，请先导出备份。</p><input type="file" id="importFile" accept=".json" style="display:none"><button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">选择 JSON 文件</button><div class="file-note" id="importNote"></div></div>
+          <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9m0 0L8 13m4-4l4 4M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导入恢复</h3><p>选择 JSON 文件导入，会<b>合并</b>新增数据（已存在的不覆盖、不丢失）。</p><input type="file" id="importFile" accept=".json" style="display:none"><button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">选择 JSON 文件</button><div class="file-note" id="importNote"></div></div>
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#ff8fab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>添加到手机主屏幕</h3><ol class="pwa-steps"><li><b>用手机浏览器打开</b>本页面链接（部署后获得）</li><li>点击浏览器底部或右上角的<b>分享按钮</b></li><li>选择「<b>添加到主屏幕</b>」或「添加到桌面」，即可像 APP 一样打开</li></ol></div>
           <div class="me-card danger-zone"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>数据管理</h3><p>清空示例数据（保留自建目标与习惯），或彻底清空全部数据。</p><button class="btn btn-ghost" onclick="clearSamples()">清空示例数据</button><button class="btn btn-danger" onclick="askClearAll()">清空全部数据</button></div>
         </div>
@@ -852,7 +858,7 @@ svg{display:block}
 
 <div class="modal-mask" id="ideaEditModal"><div class="modal"><div class="modal-head"><h3>编辑灵感</h3><button class="icon-btn" onclick="closeIdeaEdit()"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="modal-body"><div class="field-row"><label>标题 <span style="color:var(--ink-3);font-weight:500">（选填）</span></label><input type="text" id="ideaEditTitle" placeholder="给灵感起个标题"></div><div class="field-row"><label>内容 <span style="color:var(--ink-3);font-weight:500">（支持加粗 / 斜体 / 列表）</span></label><div class="idea-toolbar" style="margin-bottom:6px"><button class="itb-btn" onmousedown="event.preventDefault()" onclick="editIdeaCmd('bold')" title="加粗 (Ctrl/⌘+B)"><strong>B</strong></button><button class="itb-btn" onmousedown="event.preventDefault()" onclick="editIdeaCmd('italic')" title="斜体 (Ctrl/⌘+I)"><em>I</em></button><button class="itb-btn" onmousedown="event.preventDefault()" onclick="editIdeaCmd('insertUnorderedList')" title="无序列表（Bullet）"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="5" cy="7" r="1.4" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="5" cy="17" r="1.4" fill="currentColor"/><path d="M10 7h10M10 12h10M10 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div id="ideaEditText" class="modal-editor" contenteditable="true" data-placeholder="写点什么…"></div></div><div class="field-row"><label>标签 <span style="color:var(--ink-3);font-weight:500">（选填，可多选）</span></label><div class="edit-tag-area" id="editTagArea"></div></div><div class="field-row"><label>图片 <span style="color:var(--ink-3);font-weight:500">（选填）</span></label><div class="idea-img-edit-tools"><button class="btn btn-ghost btn-sm" onclick="editPickImage()"><svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;margin-right:4px"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="10" r="1.8" fill="currentColor"/><path d="M5 17l4.5-4.5 3 3L16 11l3 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>上传图片</button><button class="btn btn-ghost btn-sm" onclick="openDoodle('edit')"><svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;margin-right:4px"><path d="M4 20l3.5-1 9.5-9.5a2 2 0 00-2.8-2.8L4.7 16.2 4 20z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 6.5l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>涂鸦</button><button class="btn btn-ghost btn-sm" id="ideaEditImgDel" onclick="editRemoveImg()" style="display:none">移除图片</button></div><div class="idea-img-preview" id="ideaEditImgPreview" style="display:none;margin-top:10px"></div></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeIdeaEdit()">取消</button><button class="btn btn-primary" onclick="saveIdeaEdit()">保存</button></div></div></div>
 
-<div class="modal-mask" id="doodleModal"><div class="modal"><div class="modal-head"><h3>涂鸦</h3><button class="icon-btn" onclick="closeDoodle()"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="modal-body"><canvas id="doodleCanvas" width="480" height="320" onpointerdown="doodleDown(event)" onpointermove="doodleMove(event)" onpointerup="doodleUp(event)" onpointerleave="doodleUp(event)"></canvas><div class="doodle-tools"><label class="doodle-tool">颜色 <input type="color" id="doodleColor" value="#ff6fa5"></label><label class="doodle-tool">粗细 <input type="range" id="doodleSize" min="1" max="24" value="4"></label><button class="btn btn-ghost btn-sm" onclick="doodleClear()">清空</button></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeDoodle()">取消</button><button class="btn btn-primary" onclick="doodleSave()">保存</button></div></div></div>
+<div class="modal-mask" id="doodleModal"><div class="modal"><div class="modal-head"><h3>涂鸦</h3><button class="icon-btn" onclick="closeDoodle()"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="modal-body"><canvas id="doodleCanvas" width="480" height="320" onpointerdown="doodleDown(event)" onpointermove="doodleMove(event)" onpointerup="doodleUp(event)" onpointerleave="doodleUp(event)"></canvas><div class="doodle-tools"><div class="doodle-tool"><span>颜色</span><div class="doodle-color-swatch" id="doodleColorSwatch" style="background:#ff6fa5" title="点击选色" onclick="openColorPopover('doodle',this)"></div><input type="hidden" id="doodleColor" value="#ff6fa5"></div><div class="doodle-tool doodle-size-tool"><span>粗细</span><input type="range" id="doodleSize" min="1" max="40" value="4" oninput="document.getElementById('doodleSizeVal').textContent=this.value"><span class="doodle-size-val" id="doodleSizeVal">4</span></div><button class="btn btn-ghost btn-sm doodle-eraser-btn" id="doodleEraserBtn" onclick="toggleDoodleEraser()"><svg class="de-icon de-eraser-icon" viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M20 20H7L3 16l9-9 8 8-4 4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M18 13l-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="de-icon de-pencil-icon" viewBox="0 0 24 24" fill="none" width="16" height="16" style="display:none"><path d="M4 20l3.5-1 9.5-9.5a2 2 0 00-2.8-2.8L4.7 16.2 4 20z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 6.5l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button class="btn btn-ghost btn-sm" onclick="doodleClear()">清空</button></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeDoodle()">取消</button><button class="btn btn-primary" onclick="doodleSave()">保存</button></div></div></div>
 
 <div class="modal-mask" id="imgLightbox" onclick="closeLightbox(event)"><div class="lightbox-inner"><img id="lightboxImg" src="" alt="灵感图片"></div></div>
 
@@ -933,7 +939,7 @@ function migrate(p){
     if(!p.focusLog)p.focusLog=[];
     if(!p.habitCalView)p.habitCalView={};
     if(!p.userName)p.userName='';
-  p.ideas.forEach(i=>{if(i.title===undefined)i.title='';if(i.img===undefined)i.img='';if(i.tag!==undefined&&i.tags===undefined){i.tags=i.tag?[i.tag]:[];delete i.tag}});
+  p.ideas.forEach(i=>{if(i.title===undefined)i.title='';if(i.img!==undefined&&i.imgs===undefined){i.imgs=i.img?[i.img]:[]}delete i.img;if(i.tag!==undefined&&i.tags===undefined){i.tags=i.tag?[i.tag]:[];delete i.tag}if(i.imgs===undefined)i.imgs=[];});
   if(!p.settings)p.settings={};
   p.goals.forEach(g=>{
     if(!Array.isArray(g.checklist))g.checklist=[];
@@ -1256,7 +1262,7 @@ function renderHome(){
   const tipEl=document.getElementById('homeTips');
   const showTip=()=>{tipEl.style.opacity='0';setTimeout(()=>{tipEl.textContent=TIPS[tipIdx];tipEl.style.opacity='1';tipIdx=(tipIdx+1)%TIPS.length;},350)};
   showTip();
-  window._tipsTimer=setInterval(showTip,6000);
+  window._tipsTimer=setInterval(showTip,10000);
   // 统计卡片
   let overdueN=0,todayN=0,undoneN=0;
   state.goals.forEach(g=>remainingItems(g).forEach(it=>{undoneN++;if(!it.dueDate)return;if(it.dueDate<t)overdueN++;else if(it.dueDate===t)todayN++}));
@@ -1708,8 +1714,8 @@ function commitTagOrder(containerId){
   renderAll();
 }
 let pickedIdeaTags=[];
-let pendingIdeaImg='',editIdeaImg=null,imgTarget='add';
-let doodleCtx=null,doodleDrawing=false;
+let pendingIdeaImgs=[],editIdeaImgs=[],imgTarget='add';
+let doodleCtx=null,doodleDrawing=false,doodleColorVal='#ff6fa5',doodleEraser=false;
 function renderIdeaTagPicker(tags){
   const el=document.getElementById('ideaTagPicker');
   if(!el)return;
@@ -1780,7 +1786,7 @@ function ideaOnFile(e){
       const c=document.createElement('canvas');c.width=w;c.height=h;
       c.getContext('2d').drawImage(img,0,0,w,h);
       const data=c.toDataURL('image/jpeg',0.85);
-      if(imgTarget==='edit'){editIdeaImg=data;renderEditImgPreview()}else{pendingIdeaImg=data;renderIdeaImgPreview()}
+      if(imgTarget==='edit'){editIdeaImgs.push(data);renderEditImgPreview()}else{pendingIdeaImgs.push(data);renderIdeaImgPreview()}
     };
     img.onerror=()=>toast('图片读取失败','error');
     img.src=r.result;
@@ -1789,16 +1795,17 @@ function ideaOnFile(e){
 }
 function renderIdeaImgPreview(){
   const el=document.getElementById('ideaImgPreview');
-  if(pendingIdeaImg){el.style.display='inline-block';el.innerHTML=`<img src="${pendingIdeaImg}" alt="预览"><button class="idea-img-del" title="移除" onclick="ideaClearImg()">×</button>`}
+  if(pendingIdeaImgs.length){el.style.display='flex';el.innerHTML=pendingIdeaImgs.map((s,i)=>`<div class="idea-img-thumb"><img src="${s}" alt="预览"><button class="idea-img-del" title="移除" onclick="ideaRemovePending(${i})">×</button></div>`).join('')}
   else{el.style.display='none';el.innerHTML=''}
 }
 function renderEditImgPreview(){
   const el=document.getElementById('ideaEditImgPreview'),del=document.getElementById('ideaEditImgDel');
-  if(editIdeaImg){el.style.display='inline-block';el.innerHTML=`<img src="${editIdeaImg}" alt="预览"><button class="idea-img-del" title="移除" onclick="editRemoveImg()">×</button>`;del.style.display='inline-flex'}
-  else{el.style.display='none';el.innerHTML='';del.style.display='none'}
+  if(editIdeaImgs.length){el.style.display='flex';el.innerHTML=editIdeaImgs.map((s,i)=>`<div class="idea-img-thumb"><img src="${s}" alt="预览"><button class="idea-img-del" title="移除" onclick="editRemoveImg(${i})">×</button></div>`).join('');if(del)del.style.display='inline-flex'}
+  else{el.style.display='none';el.innerHTML='';if(del)del.style.display='none'}
 }
-function ideaClearImg(){pendingIdeaImg='';renderIdeaImgPreview()}
-function editRemoveImg(){editIdeaImg='';renderEditImgPreview()}
+function ideaClearImg(){pendingIdeaImgs=[];renderIdeaImgPreview()}
+function ideaRemovePending(i){pendingIdeaImgs.splice(i,1);renderIdeaImgPreview()}
+function editRemoveImg(i){if(typeof i==='number')editIdeaImgs.splice(i,1);else editIdeaImgs=[];renderEditImgPreview()}
 /* 涂鸦画板 */
 function openDoodle(target){
   imgTarget=target||'add';
@@ -1813,7 +1820,7 @@ function doodleClear(){if(doodleCtx){doodleCtx.fillStyle='#fff';doodleCtx.fillRe
 function doodleSave(){
   const cv=document.getElementById('doodleCanvas');
   const data=cv.toDataURL('image/png');
-  if(imgTarget==='edit'){editIdeaImg=data;renderEditImgPreview()}else{pendingIdeaImg=data;renderIdeaImgPreview()}
+  if(imgTarget==='edit'){editIdeaImgs.push(data);renderEditImgPreview()}else{pendingIdeaImgs.push(data);renderIdeaImgPreview()}
   closeDoodle();
 }
 function doodlePos(e){
@@ -1821,9 +1828,10 @@ function doodlePos(e){
   const sx=cv.width/r.width,sy=cv.height/r.height;
   return {x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};
 }
-function doodleDown(e){e.preventDefault();doodleDrawing=true;const p=doodlePos(e);doodleCtx.beginPath();doodleCtx.moveTo(p.x,p.y);doodleCtx.strokeStyle=document.getElementById('doodleColor').value;doodleCtx.lineWidth=parseInt(document.getElementById('doodleSize').value,10);doodleCtx.lineTo(p.x+0.1,p.y+0.1);doodleCtx.stroke()}
-function doodleMove(e){if(!doodleDrawing)return;e.preventDefault();const p=doodlePos(e);doodleCtx.lineTo(p.x,p.y);doodleCtx.strokeStyle=document.getElementById('doodleColor').value;doodleCtx.lineWidth=parseInt(document.getElementById('doodleSize').value,10);doodleCtx.stroke()}
+function doodleDown(e){e.preventDefault();doodleDrawing=true;const p=doodlePos(e);doodleCtx.beginPath();doodleCtx.moveTo(p.x,p.y);doodleCtx.globalCompositeOperation='source-over';doodleCtx.strokeStyle=doodleEraser?'#ffffff':doodleColorVal;doodleCtx.lineWidth=parseInt(document.getElementById('doodleSize').value,10);doodleCtx.lineTo(p.x+0.1,p.y+0.1);doodleCtx.stroke()}
+function doodleMove(e){if(!doodleDrawing)return;e.preventDefault();const p=doodlePos(e);doodleCtx.globalCompositeOperation='source-over';doodleCtx.lineTo(p.x,p.y);doodleCtx.strokeStyle=doodleEraser?'#ffffff':doodleColorVal;doodleCtx.lineWidth=parseInt(document.getElementById('doodleSize').value,10);doodleCtx.stroke()}
 function doodleUp(){doodleDrawing=false}
+function toggleDoodleEraser(){doodleEraser=!doodleEraser;const b=document.getElementById('doodleEraserBtn');if(b){b.classList.toggle('active',doodleEraser);const ei=b.querySelector('.de-eraser-icon'),pi=b.querySelector('.de-pencil-icon');if(ei&&pi){ei.style.display=doodleEraser?'none':'';pi.style.display=doodleEraser?'':'none';}}}
 /* 图片放大查看 */
 function zoomIdeaImg(src){document.getElementById('lightboxImg').src=src;document.getElementById('imgLightbox').classList.add('show')}
 function closeLightbox(e){if(e.target.id!=='lightboxImg')document.getElementById('imgLightbox').classList.remove('show')}
@@ -1881,14 +1889,14 @@ function ideaCard(it){
     </div>
     <div class="idea-card-title">${it.title?esc(it.title):''}</div>
     <div class="idea-text">${renderIdeaText(it.text)}</div>
-    ${it.img?`<div class="idea-img"><img src="${it.img}" alt="灵感图片" onclick="zoomIdeaImg(this.src)"></div>`:''}
+    ${(it.imgs&&it.imgs.length)?`<div class="idea-img">${it.imgs.map(s=>`<img src="${s}" alt="灵感图片" onclick="zoomIdeaImg(this.src)">`).join('')}</div>`:''}
     <div class="idea-meta">${it.isSample?'<span class="idea-tag" style="background:#94a3b8;color:#fff;margin-right:5px">示例</span>':''}${(it.tags||[]).length?it.tags.map(t=>`<span class="idea-tag" style="background:${tagColor(t)}1a;color:${tagColor(t)}">${esc(t)}</span>`).join(''):''}<span class="idea-date">${dt}</span></div>
   `;
   return el;
 }
 function editIdea(id){
   const it=state.ideas.find(x=>x.id===id);if(!it)return;
-  editingIdeaId=id;editIdeaImg=it.img||'';
+  editingIdeaId=id;editIdeaImgs=it.imgs?(it.imgs.slice()):[];
   document.getElementById('ideaEditTitle').value=it.title||'';
   const ed=document.getElementById('ideaEditText');
   ed.innerHTML=/<[a-z][\s\S]*>/i.test(it.text)?it.text:markdownToHtml(it.text);
@@ -1899,7 +1907,7 @@ function editIdea(id){
   document.getElementById('ideaEditModal').classList.add('show');
   setTimeout(()=>document.getElementById('ideaEditText').focus(),100);
 }
-function closeIdeaEdit(){document.getElementById('ideaEditModal').classList.remove('show');editingIdeaId=null;editIdeaImg=null;editPickedTags=[]}
+function closeIdeaEdit(){document.getElementById('ideaEditModal').classList.remove('show');editingIdeaId=null;editIdeaImgs=[];editPickedTags=[]}
 let editPickedTags=[];
 function renderEditTagPicker(){
   const el=document.getElementById('editTagArea');
@@ -1971,11 +1979,11 @@ function saveIdeaEdit(){
   const it=state.ideas.find(x=>x.id===editingIdeaId);if(!it)return;
   const ed=document.getElementById('ideaEditText');
   const plain=ed.innerText.replace(/ /g,' ').trim();
-  if(!plain&&!editIdeaImg){toast('内容不能为空','error');return}
+  if(!plain&&!editIdeaImgs.length){toast('内容不能为空','error');return}
   it.title=document.getElementById('ideaEditTitle').value.trim()||'';
   it.text=ed.innerHTML.trim();
   it.tags=[...editPickedTags];
-  if(editIdeaImg!==null)it.img=editIdeaImg;
+  it.imgs=editIdeaImgs.slice();
   save();closeIdeaEdit();renderIdeas();toast('已更新','success');
 }
 function parseDateFormatted(ts){
@@ -1989,10 +1997,10 @@ function addIdea(){
   const titleEl=document.getElementById('ideaTitle');
   const html=inp.innerHTML.trim();const title=titleEl.value.trim();
   const plain=inp.innerText.replace(/ /g,' ').trim();
-  if(!plain&&!pendingIdeaImg){toast('请先写下灵感内容或添加图片','error');return}
+  if(!plain&&!pendingIdeaImgs.length){toast('请先写下灵感内容或添加图片','error');return}
   const tagInpVal=tagInp.value.trim();
   const tags=[...new Set([...pickedIdeaTags,...tagInpVal?tagInpVal.split(/[,，\s]+/).map(s=>s.trim()).filter(Boolean):[]])];
-  state.ideas.push({id:genId('i_'),title,text:html,done:false,starred:false,tags,img:pendingIdeaImg||'',createdAt:Date.now()});
+  state.ideas.push({id:genId('i_'),title,text:html,done:false,starred:false,tags,imgs:pendingIdeaImgs.slice(),createdAt:Date.now()});
   inp.innerHTML='';titleEl.value='';tagInp.value='';pickedIdeaTags=[];ideaClearImg();
   save();renderIdeas();toast('灵感已记录','success');
 }
@@ -2438,6 +2446,7 @@ function updateHabitBadge(){
 const colorPicksEl=document.getElementById('colorPicks');
 function normalizeHex(s){if(!s)return null;s=String(s).trim();if(s[0]!=='#')s='#'+s;if(/^#[0-9a-fA-F]{3}$/.test(s))s='#'+s.slice(1).split('').map(c=>c+c).join('');if(/^#[0-9a-fA-F]{6}$/.test(s))return s.toUpperCase();return null}
 function setColor(which,val,sourceEl,src){
+  if(which==='doodle'){doodleColorVal=val;const di=document.getElementById('doodleColor');if(di)di.value=val;return;}
   if(which==='goal')pickedColor=val;else pickedHColor=val;
   const container=which==='goal'?colorPicksEl:habitColorsEl;
   const isPreset=COLORS.indexOf(val)>-1;
@@ -2533,8 +2542,8 @@ function _cpRender(){
   // SB canvas
   const sCtx=sbC.getContext('2d');const hueRgb=_hsvToRgb(_cpHue,1,1);
   sCtx.fillStyle='#fff';sCtx.fillRect(0,0,sbW,sbH);
-  const gV=sCtx.createLinearGradient(0,0,0,sbH);gV.addColorStop(0,'rgba(0,0,0,0)');gV.addColorStop(1,'#000');sCtx.fillStyle=gV;sCtx.fillRect(0,0,sbW,sbH);
   const gS=sCtx.createLinearGradient(0,0,sbW,0);gS.addColorStop(0,'#fff');gS.addColorStop(1,'rgb('+hueRgb.r+','+hueRgb.g+','+hueRgb.b+')');sCtx.fillStyle=gS;sCtx.fillRect(0,0,sbW,sbH);
+  const gV=sCtx.createLinearGradient(0,0,0,sbH);gV.addColorStop(0,'rgba(0,0,0,0)');gV.addColorStop(1,'#000');sCtx.fillStyle=gV;sCtx.fillRect(0,0,sbW,sbH);
   // Hue canvas — 彩虹渐变（硬编码7色确保正确）
   const hCtx=hueC.getContext('2d');
   const hw=hueC.width,hh=hueC.height;
@@ -2690,10 +2699,33 @@ function exportJSON(){
   a.href=url;a.download='目标管理台_备份_'+todayStr()+'.json';a.click();URL.revokeObjectURL(url);
   toast('已导出 JSON 备份','success');
 }
+function mergeState(p){
+  const mergeArr=(key,idKey)=>{
+    const cur=state[key]||[];const exist=new Set(cur.map(x=>x[idKey]));
+    const add=(p[key]||[]).filter(x=>x&&!exist.has(x[idKey]));
+    state[key]=cur.concat(add);
+  };
+  mergeArr('goals','id');mergeArr('habits','id');mergeArr('ideas','id');
+  const curC=state.categories||[],existC=new Set(curC.map(c=>c.name));
+  (p.categories||[]).forEach(c=>{if(c&&c.name&&!existC.has(c.name))curC.push(c)});
+  const wr=state.weeklyReports||{},pwr=p.weeklyReports||{};
+  Object.keys(pwr).forEach(k=>{if(!(k in wr))wr[k]=pwr[k]});
+  const dedupe=key=>{const cur=(state[key]||[]).slice(),set=new Set(cur);(p[key]||[]).forEach(x=>{if(x!==undefined&&!set.has(x)){cur.push(x);set.add(x)}});state[key]=cur;};
+  dedupe('pomoLog');dedupe('focusLog');
+}
 document.getElementById('importFile').addEventListener('change',e=>{
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=ev=>{try{const p=JSON.parse(ev.target.result);migrate(p);showConfirm('导入将覆盖','导入会覆盖当前全部数据，且无法撤销。确定继续吗？',()=>{state=p;save();toast('导入成功','success');document.getElementById('importNote').textContent='已恢复 '+state.goals.length+' 个目标 / '+state.habits.length+' 个习惯';renderAll()})}catch(err){toast('文件格式错误，导入失败','error')}};
+  reader.onload=ev=>{try{const p=JSON.parse(ev.target.result);migrate(p);showConfirm('导入将合并','导入会合并新增数据（已存在的不覆盖、不丢失）。确定继续吗？',()=>{
+    const bg=state.goals.length,bh=state.habits.length,bi=state.ideas.length,bw=Object.keys(state.weeklyReports||{}).length;
+    mergeState(p);
+    const ag=state.goals.length-bg,ah=state.habits.length-bh,ai=state.ideas.length-bi,aw=Object.keys(state.weeklyReports||{}).length-bw;
+    save();renderAll();
+    const parts=[];if(ag)parts.push(ag+' 个目标');if(ah)parts.push(ah+' 个习惯');if(ai)parts.push(ai+' 个灵感');if(aw)parts.push(aw+' 篇周报');
+    toast(parts.length?('已合并新增：'+parts.join(' / ')):'没有可新增的数据','success');
+    const note='已导入：'+state.goals.length+' 个目标 / '+state.habits.length+' 个习惯 / '+state.ideas.length+' 个灵感 / '+Object.keys(state.weeklyReports||{}).length+' 篇周报';
+    const inp=document.getElementById('importNote');if(inp)inp.textContent=note;
+  })}catch(err){toast('文件格式错误，导入失败','error')}};
   reader.readAsText(file);e.target.value='';
 });
 function clearSamples(){
