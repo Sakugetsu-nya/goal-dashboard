@@ -6,9 +6,6 @@
 <meta name="theme-color" content="#ff8fab">
 <title>目标管理台 · 学习与项目</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="目标管理台">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -40,8 +37,8 @@ svg{display:block}
 .app{min-height:100vh;display:flex}
 .sidebar{width:232px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);position:fixed;top:0;left:0;bottom:0;z-index:30;display:flex;flex-direction:column;padding:20px 14px}
 .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
-.brand-logo{width:38px;height:38px;border-radius:11px;background:var(--grad);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255,143,171,.38)}
-.brand-logo svg{width:22px;height:22px}
+.brand-logo{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.brand-logo img{width:100%;height:100%;object-fit:contain}
 .brand-text{font-weight:800;font-size:16px;letter-spacing:.2px}
 .brand-text small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);letter-spacing:.3px}
 .nav{display:flex;flex-direction:column;gap:4px;margin-top:6px}
@@ -583,8 +580,9 @@ svg{display:block}
 .del-cat-opt.danger:hover{border-color:var(--danger);background:#fef2f2}
 .dco-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}
 
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:300;transition:transform .3s,opacity .3s;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;max-width:90vw;opacity:0}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:300;transition:transform .3s,opacity .3s;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;max-width:90vw;opacity:0}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.sample-badge{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;font-weight:700;color:#fff;background:var(--ink-3);line-height:1.7;vertical-align:middle}
 .toast svg{width:18px;height:18px}
 .toast.success{background:var(--success)}
 .toast.error{background:var(--danger)}
@@ -656,7 +654,7 @@ svg{display:block}
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <div class="brand-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z" fill="#fff" opacity=".9"/><path d="M9 12l2 2 4-4" stroke="#ff8fab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="brand-logo"><img src="brand-logo.png" alt="" style="width:38px;height:38px;border-radius:11px"/></div>
       <div class="brand-text">目标管理台<small>学习 · 生活</small></div>
     </div>
     <nav class="nav">
@@ -668,12 +666,12 @@ svg{display:block}
       <button class="nav-item" data-tab="weekly"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>周报</span></button>
       <button class="nav-item" data-tab="me"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>我的</span></button>
     </nav>
-    <div class="sidebar-foot">数据存于本地浏览器<br><b>建议定期导出备份</b></div>
+    <div class="sidebar-foot">数据存于本地浏览器<br><b>建议定期导出备份</b><br><span style="font-size:11px;color:var(--ink-3);margin-top:4px;display:inline-block">示例数据可在【我的】页面清空</span></div>
   </aside>
   <div class="main">
     <div class="topbar">
       <button class="menu-btn" id="menuBtn"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <div class="brand"><div class="brand-logo" style="width:32px;height:32px;border-radius:9px"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z" fill="#fff" opacity=".9"/><path d="M9 12l2 2 4-4" stroke="#ff8fab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="brand-text">目标管理台<small>学习 · 生活</small></div></div>
+      <div class="brand"><div class="brand-logo" style="width:32px;height:32px;border-radius:9px;background:none;box-shadow:none"><img src="brand-logo.png" alt="" style="width:32px;height:32px;border-radius:9px"/></div><div class="brand-text">目标管理台<small>学习 · 生活</small></div></div>
     </div>
     <div class="content">
       <div class="backup-banner" id="backupBanner">
@@ -755,7 +753,7 @@ svg{display:block}
             <button class="timer-tab active" onclick="setCountMode('up')">正计时</button>
             <button class="timer-tab" onclick="setCountMode('down')">倒计时</button>
           </div>
-          <div class="timer-settings" id="countDownSet">
+          <div class="timer-settings" id="countDownSet" style="display:none">
             <label>时长 <input type="number" id="countMins" value="10" min="1" max="600" onchange="countSync()"> 分</label>
           </div>
           <div class="timer-controls">
@@ -789,7 +787,7 @@ svg{display:block}
           </div>
           <div class="home-col">
             <div class="home-block">
-              <div class="home-block-head"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M3 17l6-6 4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>近 14 天完成趋势</h3></div>
+              <div class="home-block-head"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M3 17l6-6 4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>近 14 天完成趋势</h3><span style="width:56px"></span></div>
               <div id="homeChart"></div>
             </div>
             <div class="home-block">
@@ -866,7 +864,7 @@ svg{display:block}
 "use strict";
 const STORE_KEY='wb_goal_mgr_v3';
 const COLORS=['#ff8fab','#f472b6','#c084fc','#06b6d4','#10b981','#fbbf24','#fb923c','#94a3b8'];
-const DEFAULT_CATEGORIES=[{name:'学习',color:'#ff8fab'},{name:'项目',color:'#c084fc'},{name:'工作',color:'#fbbf24'},{name:'生活',color:'#10b981'}];
+const DEFAULT_CATEGORIES=[{name:'学习',color:'#ff8fab'},{name:'生活',color:'#10b981'}];
 const WEEKDAY_NAMES=['周日','周一','周二','周三','周四','周五','周六'];
 let state={version:'5.0',goals:[],habits:[],categories:[],weeklyReports:{},ideas:[],pomoLog:[],focusLog:[],settings:{lastVisit:''},userName:'',ideaTagOrder:[],habitCalView:{}};
 let editingGoalId=null,itemGoalId=null,editingHabitId=null;
@@ -956,25 +954,17 @@ function seedSamples(){
       mk('Unit 4 词表',true,'',d4),mk('Unit 5 词表',true,'',d3),mk('Unit 6 词表',true,'',d1),
       mk('Unit 7 词表',false,t,''),mk('Unit 8 词表',false,fut7,''),mk('Unit 9 词表',false,'','')
     ]},
-    {id:'g_sb',category:'学习',name:'读《人类简史》',deadline:addDays(t,35),color:'#0891b2',obstacle:'书太厚，翻几页就觉得烦',strategy:'如果不想读，我就只读 10 页就停，不逼自己',createdAt:d7,isSample:true,checklist:[
-      mk('第 1-30 页 认知革命',true,'',d5),mk('第 31-70 页 农业陷阱',true,'',d4),mk('第 71-105 页 金钱与帝国',true,'',d3),
-      mk('第 106-140 页 科学革命',false,t,''),mk('第 141-180 页 人类融合',false,fut3,''),mk('第 181-220 页 科技与幸福',false,fut14,'')
-    ]},
-    {id:'g_sp',category:'项目',name:'Python 入门课',deadline:addDays(t,50),color:'#ca8a04',obstacle:'遇到报错容易卡住就放弃',strategy:'如果报错卡住超过 20 分钟，我就查 Stack Overflow 或问 AI',createdAt:d7,isSample:true,checklist:[
-      mk('第 1 节 环境搭建',true,'',d6),mk('第 2 节 变量与类型',true,'',d5),mk('第 3 节 循环语句',true,'',d4),
-      mk('第 4 节 函数定义',false,d7,''),mk('第 5 节 列表与字典',false,fut1,''),mk('第 6 节 文件读写',false,fut7,'')
+    {id:'g_bjd',category:'生活',name:'组一个bjd 待办清单',deadline:addDays(t,60),color:'#10b981',obstacle:'',strategy:'',createdAt:d7,isSample:true,checklist:[
+      mk('挑选妆娘',false,'',''),mk('挑选毛娘',false,'',''),mk('买体子',false,'',''),mk('选娃衣',false,'','')
     ]}
   ];
   state.habits=[
-    {id:'h_read',name:'阅读 30 分钟',color:'#16a34a',weeklyTarget:7,createdAt:d7,records:[d6,d5,d4,d3,d2,d1],isSample:true},
     {id:'h_gym',name:'运动打卡',color:'#ea580c',weeklyTarget:4,createdAt:d7,records:[d7,d5,d3,t],isSample:true},
-    {id:'h_water',name:'喝够 8 杯水',color:'#2563eb',weeklyTarget:7,createdAt:d7,records:[d7,d6,d5,d4,d3,d2,d1,t],isSample:true},
-    {id:'h_med',name:'冥想 10 分钟',color:'#db2777',weeklyTarget:5,createdAt:addDays(t,-3),records:[d3,d2],isSample:true}
+    {id:'h_water',name:'喝够 8 杯水',color:'#2563eb',weeklyTarget:7,createdAt:d7,records:[d7,d6,d5,d4,d3,d2,d1,t],isSample:true}
   ];
   state.ideas=[
-    {id:genId('i_'),text:'把「待办清单」做成可拖拽排序，按紧急度自动归位',tag:'产品',starred:true,done:false,createdAt:Date.now()-86400000*2,isSample:true},
-    {id:genId('i_'),text:'周末试试用番茄钟写论文，25 分钟专注 + 5 分钟休息',tag:'学习',starred:false,done:false,createdAt:Date.now()-86400000,isSample:true},
-    {id:genId('i_'),text:'灵感管理台可以增加「随机回顾」按钮，每天复习一条旧灵感',tag:'想法',starred:false,done:true,createdAt:Date.now()-3600000,isSample:true}
+    {id:genId('i_'),text:'想吃布丁',tag:'生活',starred:false,done:false,createdAt:Date.now()-86400000,isSample:true},
+    {id:genId('i_'),text:'有机化学把群友都折磨成什么样了',tag:'学习',starred:false,done:false,createdAt:Date.now()-3600000,isSample:true}
   ];
   state.settings.lastVisit=t;save();
 }
@@ -1409,7 +1399,7 @@ function habitCard(h){
   const targetTxt=h.weeklyTarget>0?('每周目标 '+h.weeklyTarget+' 天'):'';
   el.innerHTML=`
     <div class="habit-top">
-      <div><div class="habit-name">${esc(h.name)}</div>${targetTxt?'<div class="habit-target">'+targetTxt+'</div>':''}</div>
+      <div><div class="habit-name">${esc(h.name)}${h.isSample?'<span class="sample-badge" style="margin-left:6px">示例</span>':''}</div>${targetTxt?'<div class="habit-target">'+targetTxt+'</div>':''}</div>
       <div class="habit-card-actions">
         <button class="icon-btn" onclick="editHabit('${h.id}')" title="编辑"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="icon-btn" onclick="askDeleteHabit('${h.id}')" title="删除"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -1753,7 +1743,7 @@ function confirmNewIdeaTag(){
   /* hide ✓/× (kept in DOM, just hidden) */
   const wrap=inp.closest('.idea-new-tag-wrap');
   if(wrap){const ok=wrap.querySelector('.cat-new-ok'),can=wrap.querySelector('.cat-new-cancel');if(ok)ok.style.display='none';if(can)can.style.display='none'}
-  if(pickedIdeaTags.includes(name))return;
+  if(pickedIdeaTags.includes(name)){toast('该标签已添加','info');return;}
   pickedIdeaTags.push(name);
   if(!state.ideaTagOrder)state.ideaTagOrder=[];
   if(!state.ideaTagOrder.includes(name))state.ideaTagOrder.push(name);
@@ -1878,7 +1868,7 @@ function ideaCard(it){
     <div class="idea-card-title">${it.title?esc(it.title):''}</div>
     <div class="idea-text">${renderIdeaText(it.text)}</div>
     ${it.img?`<div class="idea-img"><img src="${it.img}" alt="灵感图片" onclick="zoomIdeaImg(this.src)"></div>`:''}
-    <div class="idea-meta">${(it.tags||[]).length?it.tags.map(t=>`<span class="idea-tag" style="background:${tagColor(t)}1a;color:${tagColor(t)}">${esc(t)}</span>`).join(''):''}<span class="idea-date">${dt}</span></div>
+    <div class="idea-meta">${it.isSample?'<span class="idea-tag" style="background:#94a3b8;color:#fff;margin-right:5px">示例</span>':''}${(it.tags||[]).length?it.tags.map(t=>`<span class="idea-tag" style="background:${tagColor(t)}1a;color:${tagColor(t)}">${esc(t)}</span>`).join(''):''}<span class="idea-date">${dt}</span></div>
   `;
   return el;
 }
@@ -1943,7 +1933,7 @@ function confirmEditNewTag(){
   const name=inp.value.trim();
   if(!name){toast('请输入标签名','error');return}
   inp.value='';
-  if(editPickedTags.includes(name))return;
+  if(editPickedTags.includes(name)){toast('该标签已添加','info');return;}
   editPickedTags.push(name);
   if(!state.ideaTagOrder)state.ideaTagOrder=[];
   if(!state.ideaTagOrder.includes(name))state.ideaTagOrder.push(name);
@@ -2778,8 +2768,6 @@ function renderAll(){
   setupTagDrag('todoCatFilter');setupTagDrag('ideaFilter');
   updateNavBadge();updateHabitBadge();renderMe();switchTab(currentTab);
 })();
-</script>
-<script>
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
 </script>
 </body>

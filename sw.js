@@ -1,5 +1,5 @@
 const CACHE = 'goal-mgr-pwa-v2';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './brand-logo.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
