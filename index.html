@@ -139,6 +139,10 @@ svg{display:block}
 .cl-item:hover .cl-del{opacity:1}
 .cl-del:hover{background:var(--danger-soft);color:var(--danger)}
 .cl-del svg{width:14px;height:14px}
+.cl-edit{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);opacity:0;transition:all .15s;flex-shrink:0}
+.cl-item:hover .cl-edit{opacity:1}
+.cl-edit:hover{background:var(--primary-soft);color:var(--primary-2)}
+.cl-edit svg{width:14px;height:14px}
 .cl-add{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
 .cl-add input.cl-text-input{flex:1;min-width:140px;padding:9px 12px;font-size:14px}
 .cl-add input.cl-due-input{width:140px;padding:9px 10px;font-size:13px}
@@ -875,7 +879,7 @@ const COLORS=['#ff8fab','#f472b6','#c084fc','#06b6d4','#10b981','#fbbf24','#fb92
 const DEFAULT_CATEGORIES=[{name:'学习',color:'#ff8fab'},{name:'生活',color:'#10b981'}];
 const WEEKDAY_NAMES=['周日','周一','周二','周三','周四','周五','周六'];
 let state={version:'5.0',goals:[],habits:[],categories:[],weeklyReports:{},ideas:[],pomoLog:[],focusLog:[],settings:{lastVisit:''},userName:'',ideaTagOrder:[],habitCalView:{}};
-let editingGoalId=null,itemGoalId=null,editingHabitId=null;
+let editingGoalId=null,itemGoalId=null,itemEditId=null,editingHabitId=null;
 let currentTab='board',todoFilter='all',boardFilter='all',weeklyOffset=0,ideaFilter='all',editingIdeaId=null;
 let pickedColor=COLORS[0],pickedCat=DEFAULT_CATEGORIES[0].name,pickedHColor=COLORS[1];
 let confirmCallback=null;
@@ -1181,6 +1185,7 @@ function checklistHtml(g,todoMode){
       html+=`<div class="${itemCls}">
         <div class="cl-check" onclick="toggleItem('${g.id}','${it.id}')" style="${it.done?'':('--c:'+g.color)}"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="cl-body"><div class="cl-text">${esc(it.text)}</div><div class="cl-meta">${dueLabel(it)}</div></div>
+        <button class="cl-edit" title="编辑" onclick="openItemModal('${g.id}','${it.id}')"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18.5 9.5a2.12 2.12 0 00-3-3L5 17v3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 6.5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="cl-del" onclick="deleteItem('${g.id}','${it.id}')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>`;
     });
@@ -1218,22 +1223,38 @@ function deleteItem(gid,iid){
 }
 
 /* Item modal */
-function openItemModal(gid){
-  itemGoalId=gid;
-  document.getElementById('itemModalTitle').textContent='添加条目';
-  document.getElementById('iText').value='';
-  document.getElementById('iDue').value='';
+function openItemModal(gid,iid){
+  itemGoalId=gid;itemEditId=iid||null;
+  const g=getGoal(gid);
+  const it=iid&&g?(g.checklist||[]).find(i=>i.id===iid):null;
+  if(it){
+    document.getElementById('itemModalTitle').textContent='编辑条目';
+    document.getElementById('iText').value=it.text||'';
+    document.getElementById('iDue').value=it.dueDate||'';
+    const sb=document.querySelector('#itemModal .btn-primary');if(sb)sb.textContent='保存';
+  }else{
+    document.getElementById('itemModalTitle').textContent='添加条目';
+    document.getElementById('iText').value='';
+    document.getElementById('iDue').value='';
+    const sb=document.querySelector('#itemModal .btn-primary');if(sb)sb.textContent='添加';
+  }
   document.getElementById('itemModal').classList.add('show');
   setTimeout(()=>document.getElementById('iText').focus(),100);
 }
-function closeItemModal(){document.getElementById('itemModal').classList.remove('show')}
+function closeItemModal(){document.getElementById('itemModal').classList.remove('show');itemEditId=null}
 function saveItem(){
   const g=getGoal(itemGoalId);if(!g)return;
   const text=document.getElementById('iText').value.trim();
   if(!text){toast('请填写条目内容','error');return}
   const due=document.getElementById('iDue').value;
-  g.checklist.push({id:genId('c_'),text,done:false,dueDate:due||'',doneDate:'',createdAt:Date.now()});
-  save();closeItemModal();toast('已添加','success');renderAll();
+  if(itemEditId){
+    const it=(g.checklist||[]).find(i=>i.id===itemEditId);
+    if(it){it.text=text;it.dueDate=due||''}
+    save();closeItemModal();itemEditId=null;toast('已保存','success');renderAll();
+  }else{
+    g.checklist.push({id:genId('c_'),text,done:false,dueDate:due||'',doneDate:'',createdAt:Date.now()});
+    save();closeItemModal();toast('已添加','success');renderAll();
+  }
 }
 
 /* Render: Board */
