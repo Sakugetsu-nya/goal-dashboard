@@ -6,10 +6,11 @@
 <meta name="theme-color" content="#ff8fab">
 <title>目标管理台 · 学习与项目</title>
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#fff8faf;--surface:#ffffff;--surface-2:#fef2f6;
+  --bg:#ffffff;--surface:#ffffff;--surface-2:#fef2f6;
   --ink:#3d1f2e;--ink-2:#7a4a5a;--ink-3:#b08a96;--line:#f9dce4;
   --primary:#ff8fab;--primary-2:#ff6fa5;--primary-soft:#ffeef4;
   --grad:linear-gradient(135deg,#ffc2d8 0%,#ff8fab 45%,#ff6fa5 100%);
@@ -593,11 +594,24 @@ svg{display:block}
 
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:300;transition:transform .3s,opacity .3s;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;max-width:90vw;opacity:0}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.sample-badge{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;font-weight:700;color:#fff;background:var(--ink-3);line-height:1.7;vertical-align:middle}
+.sample-badge{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;font-weight:700;color:#fff;background:var(--ink-3);line-height:1.7;vertical-align:middle;white-space:nowrap}
 .toast svg{width:18px;height:18px}
 .toast.success{background:var(--success)}
 .toast.error{background:var(--danger)}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:250;overflow:hidden;display:none}
+.update-modal{position:fixed;inset:0;background:rgba(26,23,48,.5);backdrop-filter:blur(3px);z-index:330;display:none;align-items:center;justify-content:center;padding:16px}
+.update-modal.show{display:flex}
+.update-modal .um-card{background:var(--surface);border-radius:16px;padding:26px 24px;max-width:340px;width:100%;text-align:center;box-shadow:var(--shadow-lg);animation:umPop .25s ease}
+@keyframes umPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.update-modal .um-icon{width:62px;height:62px;border-radius:16px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;overflow:hidden}
+.update-modal .um-icon img{width:44px;height:44px;border-radius:11px;display:block;object-fit:contain}
+.update-modal .um-title{font-size:18px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.update-modal .um-changes{background:var(--surface-2);border-radius:10px;padding:12px 14px;margin-bottom:20px;text-align:left;font-size:13px;color:var(--ink-2);line-height:1.7}
+.update-modal .um-changes .um-v{font-weight:800;color:var(--ink);margin-bottom:6px;display:block}
+.update-modal .um-changes ul{margin:0;padding-left:18px}
+.update-modal .um-changes li{margin:2px 0}
+.update-modal .um-actions{display:flex;gap:10px}
+.update-modal .um-actions .btn{flex:1;justify-content:center}
 .confetti-layer.show{display:block}
 .mobile-nav{display:none}
 
@@ -828,7 +842,7 @@ svg{display:block}
           <div class="wk-field"><label><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>问题</label><textarea id="wfProblem" placeholder="遇到的卡点、阻碍"></textarea></div>
           <div class="wk-field"><label><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>尝试</label><textarea id="wfTry" placeholder="本周试过的方法、效果"></textarea></div>
           <div class="wk-field"><label><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>下周预案</label><textarea id="wfPlan" placeholder="下周打算怎么做"></textarea></div>
-          <div class="wk-gen"><button class="btn btn-primary btn-sm" id="wkSaveBtn" onclick="saveWeeklyForm()">保存</button><button class="btn btn-primary btn-sm" id="wkEditBtn" onclick="toggleWkEdit(true)" style="display:none"><svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;vertical-align:-2px;margin-right:3px"><path d="M18.5 2.5l3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 6l2 2M11 17l-4 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>编辑</button><button class="btn btn-ghost btn-sm" onclick="genWeeklyText()">一键生成周报文本</button></div>
+          <div class="wk-gen"><button class="btn btn-primary btn-sm" id="wkSaveBtn" onclick="saveWeeklyForm()">保存</button><button class="btn btn-primary btn-sm" id="wkEditBtn" onclick="toggleWkEdit(true)" style="display:none"><svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;vertical-align:-2px;margin-right:3px"><path d="M18.5 2.5l3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 6l2 2M11 17l-4 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>编辑</button><button class="btn btn-ghost btn-sm" id="wkClearBtn" onclick="clearWeekly()" style="display:none">清除本周复盘</button><button class="btn btn-ghost btn-sm" onclick="genWeeklyText()">一键生成周报文本</button></div>
         </div>
         <div class="report-out" id="reportOut"><div class="report-out-head"><h4>周报文本</h4><button onclick="copyReport()">复制</button></div><div id="reportText"></div></div>
       </section>
@@ -840,7 +854,7 @@ svg{display:block}
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导出备份</h3><p>导出全部数据为 JSON 文件，含目标、习惯、分类与 checklist 记录，可跨设备迁移。</p><button class="btn btn-primary" onclick="exportJSON()">导出 JSON</button><div class="data-stats" id="dataStats"></div></div>
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9m0 0L8 13m4-4l4 4M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>导入恢复</h3><p>选择 JSON 文件导入，会<b>合并</b>新增数据（已存在的不覆盖、不丢失）。</p><input type="file" id="importFile" accept=".json" style="display:none"><button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">选择 JSON 文件</button><div class="file-note" id="importNote"></div></div>
           <div class="me-card"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#ff8fab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>添加到手机主屏幕</h3><ol class="pwa-steps"><li><b>用手机浏览器打开</b>本页面链接（部署后获得）</li><li>点击浏览器底部或右上角的<b>分享按钮</b></li><li>选择「<b>添加到主屏幕</b>」或「添加到桌面」，即可像 APP 一样打开</li></ol></div>
-          <div class="me-card danger-zone"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>数据管理</h3><p>清空示例数据（保留自建目标与习惯），或彻底清空全部数据。</p><button class="btn btn-ghost" onclick="clearSamples()">清空示例数据</button><button class="btn btn-danger" onclick="askClearAll()">清空全部数据</button></div>
+          <div class="me-card danger-zone"><h3><svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>数据管理</h3><p>清空示例数据（保留自建目标与习惯），恢复被清空的示例，或彻底清空全部数据。</p><button class="btn btn-ghost" onclick="clearSamples()">清空示例数据</button><button class="btn btn-ghost" onclick="restoreSamples()">恢复示例数据</button><button class="btn btn-danger" onclick="askClearAll()">清空全部数据</button></div>
         </div>
       </section>
     </div>
@@ -872,9 +886,24 @@ svg{display:block}
 
 <div class="toast" id="toast"></div>
 <div class="confetti-layer" id="confetti"></div>
+<div class="update-modal" id="updateBanner"><div class="um-card"><div class="um-icon"><img src="brand-logo.png" alt="目标管理台"></div><h3 class="um-title">发现新版本</h3><div class="um-changes" id="umChanges"></div><div class="um-actions"><button class="btn btn-ghost" onclick="document.getElementById('updateBanner').classList.remove('show')">稍后</button><button class="btn btn-primary" onclick="doUpdateReload()">立即刷新</button></div></div></div>
 <script>
 "use strict";
 const STORE_KEY='wb_goal_mgr_v3';
+const CHANGES=[
+  {v:'2026-08-16', items:[
+    '新增「发现新版本」提示功能',
+    '新增「恢复示例数据」功能（清空后可一键找回）',
+    '首页示例内容显示「示例」标签',
+    '修复番茄钟组数与实际专注番茄数不符的问题'
+  ]},
+  {v:'2026-08-13', items:[
+    '首页待办 / 习惯 / 灵感卡片显示「示例」标签',
+    '灵感支持多图与多涂鸦，导入改为合并不覆盖',
+    '番茄钟中途跳过时把已过专注时间计入时长'
+  ]}
+];
+
 const COLORS=['#ff8fab','#f472b6','#c084fc','#06b6d4','#10b981','#fbbf24','#fb923c','#94a3b8'];
 const DEFAULT_CATEGORIES=[{name:'学习',color:'#ff8fab'},{name:'生活',color:'#10b981'}];
 const WEEKDAY_NAMES=['周日','周一','周二','周三','周四','周五','周六'];
@@ -966,7 +995,7 @@ function seedSamples(){
       mk('Unit 4 词表',true,'',d4),mk('Unit 5 词表',true,'',d3),mk('Unit 6 词表',true,'',d1),
       mk('Unit 7 词表',false,t,''),mk('Unit 8 词表',false,fut7,''),mk('Unit 9 词表',false,'','')
     ]},
-    {id:'g_bjd',category:'生活',name:'组一个bjd 待办清单',deadline:addDays(t,60),color:'#10b981',obstacle:'',strategy:'',createdAt:d7,isSample:true,checklist:[
+    {id:'g_bjd',category:'生活',name:'组一个bjd',deadline:addDays(t,60),color:'#10b981',obstacle:'',strategy:'',createdAt:d7,isSample:true,checklist:[
       mk('挑选妆娘',false,'',''),mk('挑选毛娘',false,'',''),mk('买体子',false,'',''),mk('选娃衣',false,'','')
     ]}
   ];
@@ -975,8 +1004,8 @@ function seedSamples(){
     {id:'h_water',name:'喝够 8 杯水',color:'#2563eb',weeklyTarget:7,createdAt:d7,records:[d7,d6,d5,d4,d3,d2,d1,t],isSample:true}
   ];
   state.ideas=[
-    {id:genId('i_'),text:'想吃布丁',tag:'生活',starred:false,done:false,createdAt:Date.now()-86400000,isSample:true},
-    {id:genId('i_'),text:'有机化学把群友都折磨成什么样了',tag:'学习',starred:false,done:false,createdAt:Date.now()-3600000,isSample:true}
+    {id:genId('i_'),title:'示例灵感1',text:'想吃布丁',tag:'生活',tags:['生活'],starred:false,done:false,createdAt:Date.now()-86400000,isSample:true},
+    {id:genId('i_'),title:'示例灵感2',text:'有机化学把群友都折磨成什么样了',tag:'学习',tags:['学习'],starred:false,done:false,createdAt:Date.now()-3600000,isSample:true}
   ];
   state.settings.lastVisit=t;save();
 }
@@ -1322,18 +1351,18 @@ function renderHome(){
   todos=todos.slice(0,6);
   const td=document.getElementById('homeTodos');
   if(!todos.length)td.innerHTML=`<div class="home-empty">今天没有紧急待办，放松一下吧～</div>`;
-  else td.innerHTML=todos.map(({g,it})=>{const cc=catColor(g.category);let due='',cls='';if(it.dueDate===t){due='今天';cls='today'}else if(it.dueDate<t){due=Math.abs(diffDays(t,it.dueDate))+'天前';cls='overdue'}return `<div class="home-row" onclick="switchTab('todo')" style="cursor:pointer"><span class="ht-tag" style="background:${cc}1a;color:${cc}">${esc(g.category)}</span><span class="ht-text">${esc(it.text)}</span><span class="ht-due ${cls}">${due}</span></div>`}).join('');
+  else td.innerHTML=todos.map(({g,it})=>{const cc=catColor(g.category);let due='',cls='';if(it.dueDate===t){due='今天';cls='today'}else if(it.dueDate<t){due=Math.abs(diffDays(t,it.dueDate))+'天前';cls='overdue'}return `<div class="home-row" onclick="switchTab('todo')" style="cursor:pointer"><span class="ht-tag" style="background:${cc}1a;color:${cc}">${esc(g.category)}</span>${g.isSample?'<span class="sample-badge" style="margin:0 2px 0 8px">示例</span>':''}<span class="ht-text">${esc(it.text)}</span><span class="ht-due ${cls}">${due}</span></div>`}).join('');
   // 习惯打卡
   const hd=document.getElementById('homeHabits');
   if(!habits.length)hd.innerHTML=`<div class="home-empty">还没有习惯，去「习惯」添加吧</div>`;
-  else hd.innerHTML=habits.map(hh=>{const done=hh.records.includes(t);const wc=weekCheckCount(hh);const wt=hh.weeklyTarget||0;return `<div class="home-row"><span class="hh-name">${esc(hh.name)}</span><span class="hh-meta">本周 ${wc}${wt?`/${wt}`:''}</span><button class="hh-btn ${done?'done':''}" style="--hc:${hh.color}" onclick="toggleHabit('${hh.id}');if(currentTab==='board')renderHome()" title="${done?'已打卡，点击取消':'点击打卡'}"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`}).join('');
+  else hd.innerHTML=habits.map(hh=>{const done=hh.records.includes(t);const wc=weekCheckCount(hh);const wt=hh.weeklyTarget||0;return `<div class="home-row"><span class="hh-name">${hh.isSample?'<span class="sample-badge" style="margin-right:6px">示例</span>':''}${esc(hh.name)}</span><span class="hh-meta">本周 ${wc}${wt?`/${wt}`:''}</span><button class="hh-btn ${done?'done':''}" style="--hc:${hh.color}" onclick="toggleHabit('${hh.id}');if(currentTab==='board')renderHome()" title="${done?'已打卡，点击取消':'点击打卡'}"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`}).join('');
   // 近 14 天趋势
   renderHomeTrend();
   // 最近灵感
   const idEl=document.getElementById('homeIdeas');
   const recent=ideas.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,4);
   if(!recent.length)idEl.innerHTML=`<div class="home-empty">还没有灵感，去「灵感」记录一下</div>`;
-  else idEl.innerHTML=recent.map(it=>`<div class="home-row" onclick="switchTab('idea')" style="cursor:pointer;align-items:flex-start"><div style="min-width:0;flex:1"><div class="hi-title">${it.title?esc(it.title):'未命名灵感'}</div>${it.text?`<div class="hi-text">${esc(ideaExcerpt(it.text))}</div>`:''}</div>${it.starred?'<span class="hi-star">★</span>':''}</div>`).join('');
+  else idEl.innerHTML=recent.map(it=>`<div class="home-row" onclick="switchTab('idea')" style="cursor:pointer;align-items:flex-start"><div style="min-width:0;flex:1"><div class="hi-title">${it.isSample?'<span class="sample-badge" style="margin-right:5px">示例</span>':''}${it.title?esc(it.title):'未命名灵感'}</div>${it.text?`<div class="hi-text">${esc(ideaExcerpt(it.text))}</div>`:''}</div>${it.starred?'<span class="hi-star">★</span>':''}</div>`).join('');
 }
 function renderHomeTrend(){
   const el=document.getElementById('homeChart');
@@ -2114,7 +2143,7 @@ function renderWeekly(){
   const bk=document.getElementById('wkBreakdown');
   if(!state.goals.length){bk.innerHTML='<div class="cl-empty">暂无目标</div>'}
   else{
-    const rows=state.goals.map(g=>{const n=weekDone.filter(r=>r.goalId===g.id).length;const pct=totalItems>0?Math.round(n/totalItems*100):0;return `<div class="wk-row"><span class="wk-name"><span class="wk-dot" style="background:${g.color}"></span>${esc(g.name)}</span><span class="wk-bar"><i style="width:${pct}%;background:${g.color}"></i></span><span class="wk-amt">${n} 条</span></div>`}).join('');
+    const rows=state.goals.map(g=>{const n=weekDone.filter(r=>r.goalId===g.id).length;const pct=totalItems>0?Math.round(n/totalItems*100):0;return `<div class="wk-row"><span class="wk-name"><span class="wk-dot" style="background:${g.color}"></span>${esc(g.name)}${g.isSample?'<span class="sample-badge" style="margin-left:6px">示例</span>':''}</span><span class="wk-bar"><i style="width:${pct}%;background:${g.color}"></i></span><span class="wk-amt">${n} 条</span></div>`}).join('');
     bk.innerHTML=rows||'<div class="cl-empty">本周无完成</div>';
   }
   // 习惯部分
@@ -2126,7 +2155,7 @@ function renderWeekly(){
       const st=habitStreak(h);
       const ok=h.weeklyTarget>0?wkCount>=h.weeklyTarget:wkCount>0;
       const meta=h.weeklyTarget>0?(wkCount+'/'+h.weeklyTarget+' 天'):(wkCount+' 天');
-      return `<div class="wk-habit-row"><span class="wh-name"><span class="wh-dot" style="background:${h.color}"></span>${esc(h.name)}</span><span class="wh-meta">保持 ${st} 天</span><span class="wh-pill ${ok?'ok':'miss'}">${meta}</span></div>`;
+      return `<div class="wk-habit-row"><span class="wh-name"><span class="wh-dot" style="background:${h.color}"></span>${esc(h.name)}${h.isSample?'<span class="sample-badge" style="margin-left:6px">示例</span>':''}</span><span class="wh-meta">保持 ${st} 天</span><span class="wh-pill ${ok?'ok':'miss'}">${meta}</span></div>`;
     }).join('');
     wh.innerHTML=rows;
   }
@@ -2152,6 +2181,8 @@ function renderWeekly(){
   // 有保存内容则只读，无内容则可编辑
   const hasContent=!!(data.keep||data.problem||data.try||data.plan);
   toggleWkEdit(!hasContent);
+  const clearBtn=document.getElementById('wkClearBtn');
+  if(clearBtn)clearBtn.style.display=hasContent?'':'none';
   document.getElementById('reportOut').classList.remove('show');
 }
 function saveWeeklyForm(){
@@ -2159,6 +2190,12 @@ function saveWeeklyForm(){
   state.weeklyReports[wk]={keep:document.getElementById('wfKeep').value,problem:document.getElementById('wfProblem').value,try:document.getElementById('wfTry').value,plan:document.getElementById('wfPlan').value};
   save();toast('已保存本周复盘','success');
   toggleWkEdit(false);
+}
+function clearWeekly(){
+  const t=todayStr();const weekStart=mondayOf(addDays(t,weeklyOffset*7));const wk=weekKey(weekStart);
+  delete state.weeklyReports[wk];
+  save();toast('已清除本周复盘','success');
+  renderWeekly();
 }
 // 周报四栏编辑/只读切换
 function toggleWkEdit(editable){
@@ -2236,10 +2273,11 @@ function timerTick(){
       const totalRounds=parseInt(dgid('pomoRounds').value,10)||4;
       if(pomo.phase==='focus'){
         pomo.count++;
-        pomo.roundInSet++;
         state.pomoLog.push(todayStr());commitFocusSession('pomodoro',focusMins*60);
-        if(pomo.roundInSet>=totalRounds){
-          // 完成一整组，进入长休息
+        const isLast=pomo.roundInSet>=totalRounds;
+        pomo.roundInSet++;
+        if(isLast){
+          // 完成一整组（第 totalRounds 个番茄），进入长休息
           pomo.phase='longBreak';
           pomo.remaining=longBreakMins*60;
           toast(`🎉 完成 ${totalRounds} 个番茄！进入长休息~`,'success');
@@ -2776,8 +2814,40 @@ function clearSamples(){
 }
 function askClearAll(){
   showConfirm('清空全部数据','此操作会删除所有目标、习惯和 checklist 条目，且无法恢复。',()=>{
-    state={version:'5.0',goals:[],habits:[],categories:DEFAULT_CATEGORIES.slice(),weeklyReports:{},settings:{lastVisit:todayStr()}};save();closeConfirm();toast('已清空全部数据','success');renderAll();
+    state={version:'5.0',goals:[],habits:[],categories:DEFAULT_CATEGORIES.slice(),weeklyReports:{},ideas:[],pomoLog:[],focusLog:[],settings:{lastVisit:todayStr(),noAutoSeed:true},userName:'',ideaTagOrder:[],habitCalView:{}};save();closeConfirm();toast('已清空全部数据','success');renderAll();
   },{okText:'确认清空',okClass:'btn-danger'});
+}
+function restoreSamples(){
+  // 防御：确保各数组字段存在，避免部分清空/异常状态导致 .some 崩溃
+  state.goals=state.goals||[];state.habits=state.habits||[];state.ideas=state.ideas||[];state.categories=state.categories||[];
+  const t=todayStr();
+  const d1=addDays(t,-1),d2=t,d3=addDays(t,-3),d4=addDays(t,-4),d5=addDays(t,-5),d6=addDays(t,-6),d7=addDays(t,-7);
+  const fut7=addDays(t,7);
+  const mk=(text,done,due,doneDate)=>({id:genId('c_'),text,done,dueDate:due||'',doneDate:doneDate||'',createdAt:Date.now()-Math.random()*1e7});
+  let added=0;
+  ['学习','生活'].forEach(c=>{if(!state.categories.some(x=>x.name===c))state.categories.push({name:c,color:COLORS[state.categories.length%COLORS.length]})});
+  if(!state.goals.some(g=>g.id==='g_sw')){
+    state.goals.push({id:'g_sw',category:'学习',name:'背英语单词',deadline:addDays(t,80),color:'#ff8fab',obstacle:'晚上加班太累，回到家只想躺平',strategy:'如果加班，我就改到早上通勤地铁上背 30 分钟',createdAt:d7,isSample:true,checklist:[
+      mk('Unit 1 词表',true,'',d7),mk('Unit 2 词表',true,'',d6),mk('Unit 3 词表',true,'',d5),
+      mk('Unit 4 词表',true,'',d4),mk('Unit 5 词表',true,'',d3),mk('Unit 6 词表',true,'',d1),
+      mk('Unit 7 词表',false,t,''),mk('Unit 8 词表',false,fut7,''),mk('Unit 9 词表',false,'','')
+    ]});added++;
+  }
+  if(!state.goals.some(g=>g.id==='g_bjd')){
+    state.goals.push({id:'g_bjd',category:'生活',name:'组一个bjd',deadline:addDays(t,60),color:'#10b981',obstacle:'',strategy:'',createdAt:d7,isSample:true,checklist:[
+      mk('挑选妆娘',false,'',''),mk('挑选毛娘',false,'',''),mk('买体子',false,'',''),mk('选娃衣',false,'','')
+    ]});added++;
+  }
+  if(!state.habits.some(h=>h.id==='h_gym')){state.habits.push({id:'h_gym',name:'运动打卡',color:'#ea580c',weeklyTarget:4,createdAt:d7,records:[d7,d5,d3,t],isSample:true});added++}
+  if(!state.habits.some(h=>h.id==='h_water')){state.habits.push({id:'h_water',name:'喝够 8 杯水',color:'#2563eb',weeklyTarget:7,createdAt:d7,records:[d7,d6,d5,d4,d3,d2,d1,t],isSample:true});added++}
+  if(!state.ideas.some(i=>i.isSample&&i.title==='示例灵感1')){
+    state.ideas.push({id:genId('i_'),title:'示例灵感1',text:'想吃布丁',tag:'生活',tags:['生活'],starred:false,done:false,createdAt:Date.now()-86400000,isSample:true});added++;
+  }
+  if(!state.ideas.some(i=>i.isSample&&i.title==='示例灵感2')){
+    state.ideas.push({id:genId('i_'),title:'示例灵感2',text:'有机化学把群友都折磨成什么样了',tag:'学习',tags:['学习'],starred:false,done:false,createdAt:Date.now()-3600000,isSample:true});added++;
+  }
+  if(!added){toast('示例数据已经都在了','error');return}
+  save();toast('已恢复 '+added+' 条示例数据','success');renderAll();
 }
 
 /* Confetti */
@@ -2843,12 +2913,13 @@ function renderAll(){
 }
 
 (function init(){
-  if(!load()){seedSamples()}
+  const fresh=!load();
+  if(fresh&&!state.settings.noAutoSeed){seedSamples()}
   state.settings.lastVisit=todayStr();save();
   setupTagDrag('todoCatFilter');setupTagDrag('ideaFilter');
   updateNavBadge();updateHabitBadge();renderMe();switchTab(currentTab);
 })();
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+if('serviceWorker' in navigator){var BUILD_VERSION='goal-mgr-pwa-cdb1c2080ef7';function showUB(){var b=document.getElementById('updateBanner');if(!b)return;var box=document.getElementById('umChanges');if(box&&typeof CHANGES!=='undefined'&&CHANGES&&CHANGES.length){var c=CHANGES[0];var html='<span class="um-v">更新于 '+c.v+'</span><ul>';(c.items||[]).forEach(function(it){html+='<li>'+it+'</li>';});html+='</ul>';box.innerHTML=html;}b.classList.add('show');}navigator.serviceWorker.register('sw.js').then(function(reg){if(reg.waiting&&navigator.serviceWorker.controller)showUB();reg.addEventListener('updatefound',function(){var nw=reg.installing;if(!nw)return;showUB();});if(reg.update)reg.update();}).catch(function(){});if(navigator.serviceWorker.controller){fetch('version.txt?t='+Date.now()).then(function(r){return r.text();}).then(function(v){if(v&&v.trim()&&v.trim()!==BUILD_VERSION)showUB();}).catch(function(){});}}function doUpdateReload(){var b=document.getElementById('updateBanner');if(b)b.classList.remove('show');if(navigator.serviceWorker.getRegistration){navigator.serviceWorker.getRegistration().then(function(reg){if(reg&&reg.waiting){try{reg.waiting.postMessage({type:'SKIP_WAITING'})}catch(e){}}setTimeout(function(){location.reload();},300);}).catch(function(){location.reload();});}else{location.reload();}}
 </script>
 </body>
 </html>
